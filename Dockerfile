@@ -1,5 +1,8 @@
-# Use an official Maven image with JDK 8 to build the application
-FROM maven:3.8.8-jdk-8 AS build
+# Use an official Maven image with Oracle JDK 8 to build the application
+FROM oraclelinux:8 AS build
+
+# Install Oracle JDK 8
+RUN dnf install -y java-1.8.0-openjdk-devel maven
 
 # Set the working directory in the container
 WORKDIR /app
@@ -18,8 +21,11 @@ COPY src ./src
 # Package the application
 RUN mvn clean package -DskipTests
 
-# Use an OpenJDK image to run the application
-FROM openjdk:8-jdk-alpine
+# Use Oracle Linux with JDK 8 to run the application
+FROM oraclelinux:8
+
+# Install Oracle JDK 8
+RUN dnf install -y java-1.8.0-openjdk
 
 # Set the working directory in the container
 WORKDIR /app
