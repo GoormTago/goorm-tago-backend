@@ -1,8 +1,8 @@
-# Use an official Maven image with Oracle JDK 8 to build the application
+# Use an official Maven image with Oracle JDK 23 to build the application
 FROM oraclelinux:8 AS build
 
-# Install Oracle JDK 8
-RUN dnf install -y java-1.8.0-openjdk-devel maven
+# Install Oracle JDK 23
+RUN dnf install -y java-23-openjdk-devel maven
 
 # Set the working directory in the container
 WORKDIR /app
@@ -21,11 +21,11 @@ COPY src ./src
 # Package the application
 RUN mvn clean package -DskipTests
 
-# Use Oracle Linux with JDK 8 to run the application
+# Use Oracle Linux with JDK 23 to run the application
 FROM oraclelinux:8
 
-# Install Oracle JDK 8
-RUN dnf install -y java-1.8.0-openjdk
+# Install Oracle JDK 23
+RUN dnf install -y java-23-openjdk
 
 # Set the working directory in the container
 WORKDIR /app
