@@ -1,5 +1,5 @@
 # Use an official Maven image with OpenJDK 1.8 to build the application
-FROM adoptopenjdk:8-jdk-hotspot
+FROM azul/zulu-openjdk:8
 
 # Install Maven
 RUN apt-get update && apt-get install -y maven && rm -rf /var/lib/apt/lists/*
