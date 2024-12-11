@@ -1,5 +1,5 @@
 # Use an official Maven image with JDK 8 to build the application
-FROM maven:3.8.8-openjdk-8 AS build
+FROM maven:3.8.8-jdk-8 AS build
 
 # Set the working directory in the container
 WORKDIR /app
