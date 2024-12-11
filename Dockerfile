@@ -1,5 +1,5 @@
 # Use an official Maven image with Oracle JDK 23 to build the application
-FROM oraclelinux:8 AS build
+FROM openjdk:23-jdk AS build
 
 # Install Oracle JDK 23
 RUN dnf install -y java-23-openjdk-devel maven
