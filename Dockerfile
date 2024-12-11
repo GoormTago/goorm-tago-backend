@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y maven && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 # Set proxy environment variables
-ENV HTTP_PROXY=http://krmp-proxy.9rum.cc:3128
+ENV HTTP_PROXY=http://krmp-proxy.9rum.cc:3128:
 ENV HTTPS_PROXY=http://krmp-proxy.9rum.cc:3128
 
 # Configure Maven proxy settings
