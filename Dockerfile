@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y maven && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 # Set proxy environment variables
-ENV HTTP_PROXY=http://krmp-proxy.9rum.cc:3128:
+ENV HTTP_PROXY=http://krmp-proxy.9rum.cc:3128
 ENV HTTPS_PROXY=http://krmp-proxy.9rum.cc:3128
 
 # Configure Maven proxy settings
@@ -20,16 +20,6 @@ COPY src ./src
 
 # Package the application
 RUN mvn clean package -DskipTests
-
-# Use OpenJDK 1.8 to run the application
-FROM openjdk:8-jdk
-
-# Set the working directory in the container
-WORKDIR /app
-
-# Set proxy environment variables
-ENV HTTP_PROXY=http://krmp-proxy.9rum.cc:3128
-ENV HTTPS_PROXY=http://krmp-proxy.9rum.cc:3128
 
 # Copy the packaged application from the build stage
 COPY --from=build /app/target/*.jar app.jar
