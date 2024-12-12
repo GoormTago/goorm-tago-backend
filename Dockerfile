@@ -16,11 +16,14 @@ COPY /Java/src ./src
 # Install Maven
 RUN apt-get update && apt-get install -y maven && rm -rf /var/lib/apt/lists/*
 
-COPY ./settings.xml /root/.m2/settings.xml
-
 # Debug: Print the contents of settings.xml to verify it was copied correctly
 RUN echo "Contents of /root/.m2/settings.xml:" && cat /root/.m2/settings.xml
 RUN echo "Find  settings.xml :" && find . -name settings.xml
+
+
+COPY ./settings.xml /root/.m2/settings.xml
+
+
 
 # Configure Maven proxy settings
 RUN echo "systemProp.http.proxyHost=krmp-pgit roxy.9rum.cc\nsystemProp.http.proxyPort=3128\nsystemProp.https.proxyHost=krmp-proxy.9rum.cc\nsystemProp.https.proxyPort=3128" > ./settings.xml
