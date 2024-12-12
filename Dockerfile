@@ -1,38 +1,20 @@
-# Use an official Maven image with OpenJDK 17 to build the application
-FROM krmp-d2hub-idock.9rum.cc/goorm/openjdk:17
+# gradle:7.3.1-jdk17 이미지를 기반으로 함
+FROM krmp-d2hub-idock.9rum.cc/goorm/openjdk:17-jdk-slim
 
-# Set proxy environment variables
-ENV HTTP_PROXY=http://krmp-proxy.9rum.cc:3128
-ENV HTTPS_PROXY=http://krmp-proxy.9rum.cc:3128
-
-# Set the working directory in the container
-WORKDIR /home/maven/project
+# 작업 디렉토리 설정
+WORKDIR /home/gradle/project
 
 # Spring 소스 코드를 이미지에 복사
-COPY /Java/pom.xml .
-COPY /Java/src ./src
+COPY . .
 
+# gradle 빌드 시 proxy 설정을 gradle.properties에 추가
+RUN echo "systemProp.http.proxyHost=krmp-proxy.9rum.cc\nsystemProp.http.proxyPort=3128\nsystemProp.https.proxyHost=krmp-proxy.9rum.cc\nsystemProp.https.proxyPort=3128" > /root/.gradle/gradle.properties
 
-# Install Maven
-RUN apt-get update && apt-get install -y maven && rm -rf /var/lib/apt/lists/*
+# gradlew를 이용한 프로젝트 필드
+RUN ./gradlew clean build
 
-# Debug: Print the contents of settings.xml to verify it was copied correctly
-RUN echo "Contents of /root/.m2/settings.xml:" && cat /root/.m2/settings.xml
-RUN echo "Find  settings.xml :" && find . -name settings.xml
+# DATABASE_URL을 환경 변수로 삽입
+ENV DATABASE_URL=jdbc:mariadb://mariadb/krampoline
 
-
-COPY ./settings.xml /root/.m2/settings.xml
-
-# Configure Maven proxy settings
-#RUN echo "systemProp.http.proxyHost=krmp-pgit roxy.9rum.cc\nsystemProp.http.proxyPort=3128\nsystemProp.https.proxyHost=krmp-proxy.9rum.cc\nsystemProp.https.proxyPort=3128" > /root/.m2/settings.xml
-
-# Package the application
-RUN mvn clean install package -DskipTests -s /root/.m2/settings.xml -X 
-
-# Run the application (adjust the path of the JAR file if necessary)
-CMD ["java", "-jar", "target/jweb-0.0.1-SNAPSHOT.jar"]
-
-
-
-
-
+# 빌드 결과 jar 파일을 실행
+CMD ["java", "-jar", "-Dspring.profiles.active=prod", "/home/gradle/project/build/libs/demo-0.0.1-SNAPSHOT.jar"]
