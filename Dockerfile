@@ -18,6 +18,10 @@ RUN apt-get update && apt-get install -y maven && rm -rf /var/lib/apt/lists/*
 
 COPY ./settings.xml /root/.m2/settings.xml
 
+# Debug: Print the contents of settings.xml to verify it was copied correctly
+RUN echo "Contents of /root/.m2/settings.xml:" && cat /root/.m2/settings.xml
+
+
 # Configure Maven proxy settings
 RUN echo "systemProp.http.proxyHost=krmp-pgit roxy.9rum.cc\nsystemProp.http.proxyPort=3128\nsystemProp.https.proxyHost=krmp-proxy.9rum.cc\nsystemProp.https.proxyPort=3128" > ./settings.xml
 
@@ -27,7 +31,7 @@ RUN mvn clean install package -DskipTests -s ./settings.xml -X
 
 
 # 빌드 결과 jar 파일을 실행
-CMD ["java", "-jar", "/home/maven/project/target/home/maven/project"
+CMD ["java", "-jar", "/home/maven/project/target"]
 
 
 # Expose the port the application will run on
