@@ -23,7 +23,7 @@ RUN echo "systemProp.http.proxyHost=krmp-pgit roxy.9rum.cc\nsystemProp.http.prox
 
 
 # Package the application
-RUN mvn clean install package -DskipTests -X 
+RUN mvn clean install package -DskipTests -s ./settings.xml -X 
 
 
 # 빌드 결과 jar 파일을 실행
