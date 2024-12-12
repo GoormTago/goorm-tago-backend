@@ -23,14 +23,11 @@ RUN echo "Find  settings.xml :" && find . -name settings.xml
 
 COPY ./settings.xml /root/.m2/settings.xml
 
-
-
 # Configure Maven proxy settings
-RUN echo "systemProp.http.proxyHost=krmp-pgit roxy.9rum.cc\nsystemProp.http.proxyPort=3128\nsystemProp.https.proxyHost=krmp-proxy.9rum.cc\nsystemProp.https.proxyPort=3128" > ./settings.xml
-
+#RUN echo "systemProp.http.proxyHost=krmp-pgit roxy.9rum.cc\nsystemProp.http.proxyPort=3128\nsystemProp.https.proxyHost=krmp-proxy.9rum.cc\nsystemProp.https.proxyPort=3128" > /root/.m2/settings.xml
 
 # Package the application
-RUN mvn clean install package -DskipTests -s ./settings.xml -X 
+RUN mvn clean install package -DskipTests -X 
 
 # Run the application (adjust the path of the JAR file if necessary)
 CMD ["java", "-jar", "target/jweb-0.0.1-SNAPSHOT.jar"]
