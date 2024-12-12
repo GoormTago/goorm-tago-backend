@@ -6,7 +6,7 @@ ENV HTTP_PROXY=http://krmp-proxy.9rum.cc:3128
 ENV HTTPS_PROXY=http://krmp-proxy.9rum.cc:3128
 
 # Configure Maven proxy settings
-RUN echo "systemProp.http.proxyHost=krmp-pgit roxy.9rum.cc\nsystemProp.http.proxyPort=3128\nsystemProp.https.proxyHost=krmp-proxy.9rum.cc\nsystemProp.https.proxyPort=3128" > /root/.m2/settings.xml
+# RUN echo "systemProp.http.proxyHost=krmp-pgit roxy.9rum.cc\nsystemProp.http.proxyPort=3128\nsystemProp.https.proxyHost=krmp-proxy.9rum.cc\nsystemProp.https.proxyPort=3128" > /root/.m2/settings.xml
 
 
 # Set the working directory in the container
