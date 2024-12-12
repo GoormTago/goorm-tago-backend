@@ -4,8 +4,10 @@ FROM krmp-d2hub-idock.9rum.cc/goorm/openjdk:17
 # Install Maven
 RUN apt-get update && apt-get install -y maven && rm -rf /var/lib/apt/lists/*
 
+
+
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /Java
 
 # Set proxy environment variables
 ENV HTTP_PROXY=http://krmp-proxy.9rum.cc:3128
