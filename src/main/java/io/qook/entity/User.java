@@ -1,4 +1,4 @@
-package io.qook.jweb.entity;
+package io.qook.entity;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;

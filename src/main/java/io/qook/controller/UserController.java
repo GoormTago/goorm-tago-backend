@@ -1,68 +1,67 @@
-package io.qook.jweb.controller;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+package io.qook.controller;
+
+import java.util.List;
+
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import io.qook.jweb.entity.User;
-import io.qook.jweb.jpa.repository.UserRepository;
+import io.qook.entity.User;
+import io.qook.jpa.repository.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Controller
+@RestController
 @RequestMapping("/users")
+@Tag(name = "User API", description = "User 관련 REST API 문서")
 public class UserController {
-	private final UserRepository userRepository;
 
-	public UserController(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
+    private final UserRepository userRepository;
 
-	// 사용자 리스트 표시
-	@GetMapping
-	public String getUsers(Model model) {
-		model.addAttribute("users", userRepository.findAll());
-		return "index"; // index.html 템플릿 반환
-	}
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+    
+	
+    @GetMapping
+    @Operation(summary = "모든 사용자 조회", description = "DB에 저장된 모든 사용자를 반환합니다.")
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
 
-	// 사용자 추가 폼 처리
-	@PostMapping("/add-user")
-	public String addUser(@RequestParam String name, @RequestParam String email, @RequestParam String password) {
-		User user = new User();
-		user.setName(name);
-		user.setEmail(email);
-		user.setPassword(email);
-		userRepository.save(user);
-		return "redirect:/users"; // 사용자 리스트로 리다이렉트
-	}
+    @GetMapping("/{id}")
+    @Operation(summary = "사용자 ID로 조회", description = "ID를 기준으로 특정 사용자를 반환합니다.")
+    public User getUserById(@PathVariable Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    }
 
-	// JSON 데이터로 사용자 생성
-	@PostMapping
-	@ResponseBody // JSON 응답으로 반환
-	public User createUser(@RequestBody User user) {
-		return userRepository.save(user);
-	}
+    @PostMapping
+    @Operation(summary = "새 사용자 추가", description = "새로운 사용자를 추가합니다.")
+    public User createUser(@RequestBody User user) {
+        return userRepository.save(user);
+    }
 
-	// 사용자 수정 메서드
-	@PutMapping("/{id}")
-	public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-		return userRepository.findById(id).map(user -> {
-			// 기존 데이터 업데이트
-			user.setName(updatedUser.getName());
-			user.setEmail(updatedUser.getEmail());
-			user.setPassword(updatedUser.getPassword()); // 필요한 경우 암호화 처리
-			userRepository.save(user);
-			return ResponseEntity.ok("User updated successfully!");
-		}).orElse(ResponseEntity.notFound().build());
-	}
+    @PutMapping("/{id}")
+    @Operation(summary = "사용자 정보 수정", description = "기존 사용자의 정보를 수정합니다.")
+    public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        return userRepository.findById(id).map(user -> {
+            user.setName(updatedUser.getName());
+            user.setEmail(updatedUser.getEmail());
+            user.setPassword(updatedUser.getPassword());
+            return userRepository.save(user);
+        }).orElseThrow(() -> new RuntimeException("User not found"));
+    }
 
-	// 사용자 삭제 메서드
-	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-		if (userRepository.existsById(id)) {
-			userRepository.deleteById(id);
-			return ResponseEntity.ok("User deleted successfully!");
-		} else {
-			return ResponseEntity.notFound().build();
-		}
-	}
+    @DeleteMapping("/{id}")
+    @Operation(summary = "사용자 삭제", description = "ID를 기준으로 사용자를 삭제합니다.")
+    public void deleteUser(@PathVariable Long id) {
+        userRepository.deleteById(id);
+    }
 }
