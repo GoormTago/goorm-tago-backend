@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Taxi Reservations</title>
+</head>
+<body>
+    <h1>Taxi Reservations</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User ID</th>
+                <th>Starting Point</th>
+                <th>Arrival Point</th>
+                <th>Reservation DateTime</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="reservation : ${taxiReservations}">
+                <td th:text="${reservation.id}"></td>
+                <td th:text="${reservation.userId}"></td>
+                <td th:text="${reservation.startingPoint}"></td>
+                <td th:text="${reservation.arrivalPoint}"></td>
+                <td th:text="${reservation.reservationDatetime}"></td>
+                <td>
+                    <a th:href="@{'/api/view/taxi-reservations/delete/' + ${reservation.id}}">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

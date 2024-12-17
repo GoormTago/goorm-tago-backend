@@ -33,4 +33,7 @@ delete_resources "statefulset" "^kubernetes"
 delete_resources "deployment" "^kubernetes"
 
 # PersistentVolumeClaim 삭제
-delete_resources "pvc" "^kubernetes"
+kubectl delete pvc -n $NAMESPACE
+
+# PersistentVolume 삭제
+kubectl delete pv

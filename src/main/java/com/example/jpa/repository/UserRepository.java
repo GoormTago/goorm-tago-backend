@@ -1,8 +1,9 @@
-package io.qook.jpa.repository;
+package com.example.jpa.repository;
 
+import com.example.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import io.qook.entity.User;
-
+@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 }

@@ -1,10 +1,10 @@
-package io.qook.controller;
+package com.example.controller;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.stereotype.Controller;
 
-import io.qook.jpa.repository.UserRepository;
+import com.example.jpa.repository.UserRepository;
 
 @Controller
 public class MainController {
@@ -15,25 +15,22 @@ public class MainController {
         this.userRepository = userRepository;
     }
 	
-	@GetMapping("/")
+	@GetMapping("/api")
 	public String Main() {
-		return "redirect:/users/sample"; 
+		return "redirect:/sample"; 
 	}
 
-	@GetMapping("/test")
-	public String apiTest() {
-		return "api";
-	}
-	
-	@GetMapping("/api")
-	public String apiTest2() {
-		return "api";
-	}
-	
 	// 사용자 리스트 표시 sample
-	@GetMapping("/sample")
+	@GetMapping("/api/sample")
 	public String samplePage(Model model) {
 		model.addAttribute("users", userRepository.findAll());
+        return "index"; // index.html 템플릿 반환
+	}
+	
+	// 사용자 필요정보 샘플데이터 전달
+	@GetMapping("/api/sampledatas")
+	public String samplePage() {
+		
         return "index"; // index.html 템플릿 반환
 	}
 
