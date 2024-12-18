@@ -1,0 +1,32 @@
+# Stage 1: Gradle 빌드 환경 설정
+FROM gradle:7.3.1-jdk17 AS build
+
+# 작업 디렉토리 설정
+WORKDIR /home/gradle/project
+
+# Gradle 배포판 복사
+COPY gradle/gradle-7.6.3-bin.zip /opt/gradle-7.6.3-bin.zip
+
+# Gradle 설치
+RUN mkdir -p /opt/gradle && \
+    unzip /opt/gradle-7.6.3-bin.zip -d /opt/gradle
+
+# Gradle 경로 설정
+ENV PATH="/opt/gradle/gradle-7.6.3/bin:${PATH}"
+
+# 프로젝트 복사 및 빌드
+COPY . .
+RUN gradle clean build --no-daemon
+
+# Stage 2: 실행 환경 설정
+FROM openjdk:17-jdk-alpine
+
+# 빌드된 JAR 파일 복사
+COPY --from=build /home/gradle/project/build/libs/kakao-1.0.jar /app/kakao-1.0.jar
+
+# 환경 변수 설정
+ENV DATABASE_URL=jdbc:mariadb://localhost:3306/test
+
+# 애플리케이션 실행
+CMD ["java", "-jar", "-Dspring.profiles.active=prod", "/app/kakao-1.0.jar"]
+
