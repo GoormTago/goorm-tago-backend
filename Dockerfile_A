@@ -22,9 +22,10 @@ RUN gradle clean build --no-daemon
 FROM openjdk:17-jdk-alpine
 
 # 빌드된 JAR 파일 복사
-COPY --from=build /home/gradle/project/build/libs/kakao-1.0.jar /app/kakao-1.0.jar
+COPY --from=build /home/gradle/project/build/libs/goormtago-1.0.jar /app/goormtago-1.0.jar
 
 # 환경 변수 설정
+ENV SPRING_PROFILES_ACTIVE=prod
 ENV DATABASE_URL=jdbc:mariadb://localhost:3306/test
 
 # 애플리케이션 실행
