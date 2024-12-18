@@ -29,5 +29,5 @@ ENV SPRING_PROFILES_ACTIVE=prod
 ENV DATABASE_URL=jdbc:mariadb://localhost:3306/test
 
 # 애플리케이션 실행
-CMD ["java", "-jar", "-Dspring.profiles.active=prod", "/app/kakao-1.0.jar"]
+CMD ["java", "-jar", "-Dspring.profiles.active=prod", "/app/GoormTago-1.0.jar"]
 
