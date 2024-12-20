@@ -32,13 +32,20 @@
                     <td th:text="${user.type}"></td>
                     <td>
                         <!-- Edit Button -->
-                        <button class="btn btn-warning btn-sm"
-                                data-bs-toggle="modal"
-                                data-bs-target="#userModal"
-                                onclick="openModal('[[${user.id}]]', '[[${user.name}]]', '[[${user.birth}]]', '[[${user.password}]]', '[[${user.phoneNumber}]]', '[[${user.type}]]')">
-                            Edit
-                        </button>
-                        <!-- Delete Button -->
+                       <button class="btn btn-warning btn-sm"
+						        data-bs-toggle="modal"
+						        data-bs-target="#userModal"
+						        th:attr="onclick=|openModal({
+							            id: '${user.id ?: ''}',
+							            name: '${user.name ?: ''}',
+							            birth: '${user.birth ?: ''}',
+							            password: '${user.password ?: ''}',
+							            phoneNumber: '${user.phoneNumber ?: ''}',
+							            type: '${user.type ?: ''}'
+							        })|">
+						    Edit
+						</button>
+						                        <!-- Delete Button -->
                         <a th:href="@{'/api/view/users/delete/' + ${user.id}}" class="btn btn-danger btn-sm">Delete</a>
                     </td>
                 </tr>
@@ -88,17 +95,26 @@
     </div>
 
     <script>
-        function openModal(id = "", name = "", birth = "", password = "", phoneNumber = "", type = "") {
-            document.getElementById("id").value = id;
-            document.getElementById("name").value = name;
-            document.getElementById("birth").value = birth;
-            document.getElementById("password").value = password;
-            document.getElementById("phoneNumber").value = phoneNumber;
-            document.getElementById("type").value = type;
-
-            const formAction = id ? `/api/view/users/edit/${id}` : "/api/view/users/add";
-            document.getElementById("userForm").setAttribute("action", formAction);
-        }
+	    function openModal(user = {}) {
+	        const {
+	            id = "",
+	            name = "",
+	            birth = "",
+	            password = "",
+	            phoneNumber = "",
+	            type = ""
+	        } = user;
+	
+	        document.getElementById("id").value = id;
+	        document.getElementById("name").value = name;
+	        document.getElementById("birth").value = birth;
+	        document.getElementById("password").value = password;
+	        document.getElementById("phoneNumber").value = phoneNumber;
+	        document.getElementById("type").value = type;
+	
+	        const formAction = id ? `/api/view/users/edit/${id}` : "/api/view/users/add";
+	        document.getElementById("userForm").setAttribute("action", formAction);
+	    }
         function submitForm(event) {
             event.preventDefault();
             const form = event.target;

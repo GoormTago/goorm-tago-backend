@@ -26,7 +26,7 @@ COPY --from=build /home/gradle/project/build/libs/goormtago-1.0.jar /app/goormta
 
 # 환경 변수 설정
 ENV SPRING_PROFILES_ACTIVE=prod
-ENV DATABASE_URL=jdbc:mariadb://localhost:3306/test
+ENV DATABASE_URL=jdbc:mariadb://host.docker.internal:3306/test
 
 # 애플리케이션 실행
 CMD ["java", "-jar", "-Dspring.profiles.active=prod", "/app/goormtago-1.0.jar"]
