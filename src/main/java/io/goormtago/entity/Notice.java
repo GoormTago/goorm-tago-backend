@@ -1,6 +1,10 @@
 package io.goormtago.entity;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,11 +24,14 @@ public class Notice {
     @Column(nullable = true)
     private String type;
 
-    @Column(nullable = true)
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = true)
+    @UpdateTimestamp
+    @Column(nullable = false)
     private LocalDateTime updatedAt;
+
 
 	public Long getId() {
 		return id;

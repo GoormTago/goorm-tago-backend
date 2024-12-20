@@ -15,7 +15,7 @@ RUN ./gradlew clean build
 
 # DATABASE_URL을 환경 변수로 삽입
 ENV SPRING_PROFILES_ACTIVE=prod
-ENV DATABASE_URL=jdbc:mariadb://mariadb/krampoline
+ENV DATABASE_URL=jdbc:mariadb://mariadb/test
 
 # 빌드 결과 jar 파일을 실행
-CMD ["java", "-jar", "-Dspring.profiles.active=prod", "/home/gradle/project/build/libs/GoormTago-1.0.jar"]
+CMD ["java", "-jar", "-Dspring.profiles.active=prod", "/home/gradle/project/build/libs/goormtago-1.0.jar"]

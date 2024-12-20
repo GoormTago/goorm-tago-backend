@@ -35,7 +35,7 @@
                         <button class="btn btn-warning btn-sm"
                                 data-bs-toggle="modal"
                                 data-bs-target="#userModal"
-                                onclick="openModal('${user.id}', '${user.name}', '${user.birth}', '${user.password}', '${user.phoneNumber}', '${user.type}')">
+                                onclick="openModal('[[${user.id}]]', '[[${user.name}]]', '[[${user.birth}]]', '[[${user.password}]]', '[[${user.phoneNumber}]]', '[[${user.type}]]')">
                             Edit
                         </button>
                         <!-- Delete Button -->
@@ -99,6 +99,33 @@
             const formAction = id ? `/api/view/users/edit/${id}` : "/api/view/users/add";
             document.getElementById("userForm").setAttribute("action", formAction);
         }
+        function submitForm(event) {
+            event.preventDefault();
+            const form = event.target;
+
+            const formData = new FormData(form);
+            const url = form.action;
+
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text); });
+                }
+                return response.text();
+            })
+            .then(message => {
+                alert(message); // 성공 메시지
+                window.location.reload(); // 페이지 새로고침
+            })
+            .catch(error => {
+                alert(error.message); // 에러 메시지
+            });
+        }
+
+        document.getElementById("userForm").addEventListener("submit", submitForm);
     </script>
 </body>
 </html>
