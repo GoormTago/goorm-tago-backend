@@ -85,3 +85,6 @@ gradle-app.setting
 .settings/org.eclipse.jdt.core.prefs
 .settings/org.eclipse.ltk.core.refactoring.prefs
 .settings/org.springframework.ide.eclipse.xml.namespaces.prefs
+.settings/org.eclipse.jdt.core.prefs
+.project
+.classpath
