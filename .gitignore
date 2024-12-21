@@ -80,3 +80,8 @@ gradle-app.setting
 
 
 
+.classpath
+.settings/org.eclipse.buildship.core.prefs
+.settings/org.eclipse.jdt.core.prefs
+.settings/org.eclipse.ltk.core.refactoring.prefs
+.settings/org.springframework.ide.eclipse.xml.namespaces.prefs
