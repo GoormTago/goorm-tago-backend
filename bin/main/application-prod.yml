@@ -10,7 +10,7 @@ spring:
     url: ${DATABASE_URL}?allowPublicKeyRetrieval=true&useSSL=false
     driver-class-name: org.mariadb.jdbc.Driver
     username: root
-    password: 15921592
+    password: "15921592"
   jpa:
     hibernate:
       ddl-auto: update
