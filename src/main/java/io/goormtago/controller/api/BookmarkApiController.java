@@ -1,4 +1,4 @@
-package io.goormtago.controller;
+package io.goormtago.controller.api;
 
 import io.goormtago.entity.Bookmark;
 import io.goormtago.jpa.repository.BookmarkRepository;

@@ -1,4 +1,4 @@
-package io.goormtago.controller;
+package io.goormtago.controller.view;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +10,7 @@ public class TestController {
     @Value("${DATABASE_URL}")
     private String databaseUrl;
 
-    @GetMapping("/db-url")
+    @GetMapping("/api/db-url")
     public String getDatabaseUrl() {
         return "Database URL: " + databaseUrl;
     }

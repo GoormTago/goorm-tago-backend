@@ -1,4 +1,4 @@
-package io.goormtago.controller;
+package io.goormtago.controller.view;
 
 import io.goormtago.entity.Notice;
 import io.goormtago.jpa.repository.NoticeRepository;

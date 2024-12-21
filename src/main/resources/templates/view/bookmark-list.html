@@ -1,35 +1,174 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Bookmarks</title>
+    <meta charset="UTF-8">
+    <title>Bookmark List</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-    <h1>Bookmarks</h1>
-    <table>
+<div class="container mt-5">
+    <h1>Bookmark List</h1>
+
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#bookmarkModal"
+            th:attr="onclick=|openModal({})|">
+        Create Bookmark
+    </button>
+
+    <table class="table table-striped">
         <thead>
-            <tr>
-                <th>ID</th>
-                <th>User ID</th>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Latitude</th>
-                <th>Longitude</th>
-                <th>Actions</th>
-            </tr>
+        <tr>
+            <th>ID</th>
+            <th>User ID</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Created At</th>
+            <th>Updated At</th>
+            <th>Actions</th>
+        </tr>
         </thead>
         <tbody>
-            <tr th:each="bookmark : ${bookmarks}">
-                <td th:text="${bookmark.id}"></td>
-                <td th:text="${bookmark.userId}"></td>
-                <td th:text="${bookmark.name}"></td>
-                <td th:text="${bookmark.address}"></td>
-                <td th:text="${bookmark.latitude}"></td>
-                <td th:text="${bookmark.longitude}"></td>
-                <td>
-                    <a th:href="@{'/api/view/bookmarks/delete/' + ${bookmark.id}}">Delete</a>
-                </td>
-            </tr>
+        <tr th:each="bookmark : ${bookmarks}">
+            <td th:text="${bookmark.id}"></td>
+            <td th:text="${bookmark.userId}"></td>
+            <td th:text="${bookmark.name}"></td>
+            <td th:text="${bookmark.address}"></td>
+            <td th:text="${bookmark.latitude}"></td>
+            <td th:text="${bookmark.longitude}"></td>
+            <td th:text="${bookmark.createdAt}"></td>
+            <td th:text="${bookmark.updatedAt}"></td>
+            <td>
+                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#bookmarkModal"
+                        th:attr="onclick=|openModal({ 
+                            id: '${bookmark.id ?: ''}',
+                            userId: '${bookmark.userId ?: ''}',
+                            name: '${bookmark.name ?: ''}',
+                            address: '${bookmark.address ?: ''}',
+                            latitude: '${bookmark.latitude ?: ''}',
+                            longitude: '${bookmark.longitude ?: ''}'
+                        })|">
+                    Edit
+                </button>
+                <button class="btn btn-danger btn-sm" th:attr="onclick=|deleteBookmark('${bookmark.id}')|">Delete</button>
+            </td>
+        </tr>
         </tbody>
     </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="bookmarkModal" tabindex="-1" aria-labelledby="bookmarkModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookmarkModalLabel">Bookmark Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="bookmarkForm">
+                <div class="modal-body">
+                    <input type="hidden" id="id" name="id">
+                    <div class="mb-3">
+                        <label for="userId" class="form-label">User ID</label>
+                        <input type="text" class="form-control" id="userId" name="userId">
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="address" name="address">
+                    </div>
+                    <div class="mb-3">
+                        <label for="latitude" class="form-label">Latitude</label>
+                        <input type="text" class="form-control" id="latitude" name="latitude">
+                    </div>
+                    <div class="mb-3">
+                        <label for="longitude" class="form-label">Longitude</label>
+                        <input type="text" class="form-control" id="longitude" name="longitude">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(bookmark = {}) {
+        const {
+            id = "",
+            userId = "",
+            name = "",
+            address = "",
+            latitude = "",
+            longitude = ""
+        } = bookmark;
+
+        document.getElementById("id").value = id;
+        document.getElementById("userId").value = userId;
+        document.getElementById("name").value = name;
+        document.getElementById("address").value = address;
+        document.getElementById("latitude").value = latitude;
+        document.getElementById("longitude").value = longitude;
+
+        const formAction = id ? `/api/view/bookmarks/edit/${id}` : "/api/view/bookmarks/add";
+        document.getElementById("bookmarkForm").setAttribute("action", formAction);
+    }
+
+    function submitForm(event) {
+        event.preventDefault();
+        const form = event.target;
+
+        const formData = new FormData(form);
+        const url = form.action;
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => { throw new Error(text); });
+            }
+            return response.text();
+        })
+        .then(message => {
+            alert(message);
+            window.location.reload();
+        })
+        .catch(error => {
+            alert(error.message);
+        });
+    }
+
+    function deleteBookmark(id) {
+        if (confirm("Are you sure you want to delete this bookmark?")) {
+            fetch(`/api/view/bookmarks/delete/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text); });
+                }
+                return response.text();
+            })
+            .then(message => {
+                alert(message);
+                window.location.reload();
+            })
+            .catch(error => {
+                alert(error.message);
+            });
+        }
+    }
+
+    document.getElementById("bookmarkForm").addEventListener("submit", submitForm);
+</script>
 </body>
 </html>
