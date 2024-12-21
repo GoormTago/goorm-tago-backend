@@ -9,7 +9,7 @@ spring:
     url: jdbc:mariadb://132.226.23.40:3306/test?allowPublicKeyRetrieval=true&useSSL=false # jdbc:mariadb://localhost:3306/test  #${DATABASE_URL}?allowPublicKeyRetrieval=true&useSSL=false
     driver-class-name: org.mariadb.jdbc.Driver
     username: root
-    password: root
+    password: 15921592
   h2:
     console:
       enabled: false

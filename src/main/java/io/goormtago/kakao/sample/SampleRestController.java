@@ -1,18 +1,16 @@
 package io.goormtago.kakao.sample;
 
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api") 
 public class SampleRestController {
 
-    private final SampleDataRepository sampleDataRepository;
 
     
     @GetMapping("/json-data")
