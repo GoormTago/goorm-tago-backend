@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/api/view/users")
-public class UserController {
+public class UserVIewController {
 
     @Autowired
     private UserRepository userRepository;

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/api/view/notice")
-public class NoticeController {
+public class NoticeViewController {
 
     @Autowired
     private NoticeRepository noticeRepository;
@@ -34,9 +34,10 @@ public class NoticeController {
         return "redirect:/api/view/notice";
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
+    @ResponseBody
     public String deleteNotice(@PathVariable Long id) {
         noticeRepository.deleteById(id);
-        return "redirect:/api/view/notice";
+        return "Deleted successfully!";
     }
 }

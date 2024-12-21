@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/api/view/bookmarks")
-public class BookmarkController {
+public class BookmarkViewController {
 
     @Autowired
     private BookmarkRepository bookmarkRepository;
@@ -33,8 +33,8 @@ public class BookmarkController {
         bookmarkRepository.save(bookmark);
         return "redirect:/api/view/bookmarks";
     }
-
-    @GetMapping("/delete/{id}")
+    
+    @PostMapping("/delete/{id}")
     public String deleteBookmark(@PathVariable Long id) {
         bookmarkRepository.deleteById(id);
         return "redirect:/api/view/bookmarks";

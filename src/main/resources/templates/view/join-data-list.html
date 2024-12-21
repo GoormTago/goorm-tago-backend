@@ -21,7 +21,6 @@
             <th>ID</th>
             <th>User ID</th>
             <th>User ID JSON</th>
-            <th>Data Name</th>
             <th>Created At</th>
             <th>Updated At</th>
             <th>Actions</th>
@@ -39,8 +38,7 @@
                         th:attr="onclick=|openModal({ 
                             id: '${joinData.id ?: ''}',
                             userId: '${joinData.userId ?: ''}',
-                            userIdJson: '${joinData.userIdJson ?: ''}',
-                            dataName: '${joinData.dataName ?: ''}'
+                            userIdJson: '${joinData.userIdJson ?: ''}'
                         })|">
                     Edit
                 </button>
@@ -70,10 +68,6 @@
                         <label for="userIdJson" class="form-label">User ID JSON</label>
                         <input type="text" class="form-control" id="userIdJson" name="userIdJson">
                     </div>
-                    <div class="mb-3">
-                        <label for="dataName" class="form-label">Data Name</label>
-                        <input type="text" class="form-control" id="dataName" name="dataName">
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -89,14 +83,12 @@
         const {
             id = "",
             userId = "",
-            userIdJson = "",
-            dataName = ""
+            userIdJson = ""
         } = joinData;
 
         document.getElementById("id").value = id;
         document.getElementById("userId").value = userId;
         document.getElementById("userIdJson").value = userIdJson;
-        document.getElementById("dataName").value = dataName;
 
         const formAction = id ? `/api/view/join-data/edit/${id}` : "/api/view/join-data/add";
         document.getElementById("joinDataForm").setAttribute("action", formAction);
@@ -131,7 +123,7 @@
     function deleteJoinData(id) {
         if (confirm("Are you sure you want to delete this join data?")) {
             fetch(`/api/view/join-data/delete/${id}`, {
-                method: 'DELETE'
+                method: 'GET'
             })
             .then(response => {
                 if (!response.ok) {

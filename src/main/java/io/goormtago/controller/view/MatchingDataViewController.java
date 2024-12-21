@@ -2,7 +2,6 @@ package io.goormtago.controller.view;
 
 import io.goormtago.entity.MatchingData;
 import io.goormtago.jpa.repository.MatchingDataRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/api/view/matching-data")
-public class MatchingDataController {
+public class MatchingDataViewController {
 
     @Autowired
     private MatchingDataRepository matchingDataRepository;
@@ -33,10 +32,11 @@ public class MatchingDataController {
         matchingDataRepository.save(matchingData);
         return "redirect:/api/view/matching-data";
     }
-
-    @GetMapping("/delete/{id}")
+    
+    @DeleteMapping("/delete/{id}")
+    @ResponseBody
     public String deleteMatchingData(@PathVariable Long id) {
         matchingDataRepository.deleteById(id);
-        return "redirect:/api/view/matching-data";
+        return "Deleted successfully";
     }
 }
