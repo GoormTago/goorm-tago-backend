@@ -9,8 +9,8 @@ spring:
   datasource:
     url: ${DATABASE_URL}?allowPublicKeyRetrieval=true&useSSL=false
     driver-class-name: org.mariadb.jdbc.Driver
-    username: root
-    password: 15921592
+    username: test
+    password: 4321
   jpa:
     hibernate:
       ddl-auto: update
