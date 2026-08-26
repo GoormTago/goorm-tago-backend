@@ -19,7 +19,7 @@ COPY --from=build /app/build/libs/*.jar /app/app.jar
 
 # 환경 변수 및 1GB RAM 맞춤 JVM 메모리 옵션
 ENV SPRING_PROFILES_ACTIVE=prod
-ENV DATABASE_URL=jdbc:mariadb://mariadb.qook.io:3306/test
+ENV DATABASE_URL=jdbc:mariadb://mysql.qook.io:3306/goormtago
 ENV JAVA_OPTS="-Xms128m -Xmx350m -XX:+UseSerialGC"
 
 EXPOSE 8080
