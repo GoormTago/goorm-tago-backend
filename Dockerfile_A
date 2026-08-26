@@ -1,33 +1,28 @@
-# Stage 1: Gradle 빌드 환경 설정
-FROM gradle:7.3.1-jdk17 AS build
+# Stage 1: 빌드 환경 (JDK)
+FROM eclipse-temurin:17-jdk-alpine AS build
+# 컨테이너 내부 작업 디렉토리
+WORKDIR /app
 
-# 작업 디렉토리 설정
-WORKDIR /home/gradle/project
-
-# Gradle 배포판 복사
-COPY gradle/gradle-7.6.3-bin.zip /opt/gradle-7.6.3-bin.zip
-
-# Gradle 설치
-RUN mkdir -p /opt/gradle && \
-    unzip /opt/gradle-7.6.3-bin.zip -d /opt/gradle
-
-# Gradle 경로 설정
-ENV PATH="/opt/gradle/gradle-7.6.3/bin:${PATH}"
-
-# 프로젝트 복사 및 빌드
+# 프로젝트 전체 복사 (gradlew, gradle 폴더, src 등)
 COPY . .
-RUN gradle clean build --no-daemon
 
-# Stage 2: 실행 환경 설정
+# 실행 권한 부여 및 빌드 (테스트 제외)
+RUN chmod +x gradlew
+RUN ./gradlew clean bootJar --no-daemon -x test
+
+# Stage 2: 실행 환경 (가벼운 JRE)
 FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
 
-# 빌드된 JAR 파일 복사
-COPY --from=build /home/gradle/project/build/libs/goormtago-1.0.jar /app/goormtago-1.0.jar
+# 빌드된 JAR 파일을 실행 컨테이너의 app.jar로 복사
+COPY --from=build /app/build/libs/*.jar /app/app.jar
 
-# 환경 변수 설정
+# 환경 변수 및 1GB RAM 맞춤 JVM 메모리 옵션
 ENV SPRING_PROFILES_ACTIVE=prod
-ENV DATABASE_URL=jdbc:mariadb://host.docker.internal:3306/test
+ENV DATABASE_URL=jdbc:mariadb://mariadb.qook.io:3306/test
+ENV JAVA_OPTS="-Xms128m -Xmx350m -XX:+UseSerialGC"
+
+EXPOSE 8080
 
 # 애플리케이션 실행
-CMD ["java", "-jar", "-Dspring.profiles.active=prod", "/app/goormtago-1.0.jar"]
-
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar -Dspring.profiles.active=prod /app/app.jar"]
